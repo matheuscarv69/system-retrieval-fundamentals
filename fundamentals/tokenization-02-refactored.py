@@ -80,3 +80,8 @@ def search_tfidf(query, vectorizer, tfidf_matrix):
 
 search_similarities = search_tfidf(query, vectorizer, tfidf_matrix)
 search_similarities
+
+print(f"Top 10 documents by similarity score for query: '{query}'\n")
+
+for doc_idx, score in search_similarities[:10]:
+    print(f"Document: {doc_idx} -> {documents[doc_idx]}\n Similarity Score: {score}\n")
