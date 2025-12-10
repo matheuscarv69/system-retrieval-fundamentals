@@ -15,3 +15,25 @@ documents = [
     "Na prática, machine learning é o motor que impulsiona muitos avanços em visão computacional e processamento de linguagem natural.",
     "Mais do que encontrar padrões, o machine learning ajuda a tomar decisões baseadas em evidências.",
 ]
+
+
+def preprocess(text):
+    # Passo importante para limpeza do texto e padronizacao para lowercase
+    # Casa != casa | essas duas palavras seriam consideradas diferentes, assim seriam dois tokens distintos
+    text_lower = text.lower()
+
+    # tokenizando o texto, cada palavra vira um token individual
+    tokens = nltk.word_tokenize(text_lower)
+
+    # Aplicando um filtro via list comprehension para manter apenas tokens alfanuméricos
+    # (sem pontuação ou caracteres especiais)
+    # List comprehension exemplo: [expressao for item in lista if condicao]
+    return [word for word in tokens if word.isalnum()]
+
+
+# Aplicando list comprehension para preprocessar cada doc na lista documents, limpando e
+# normalizando o texto e retornando uma lista de tokens alfanuméricos
+# o " ".join()" serve para juntar os tokens de volta em uma string única, separando por espaço
+preprocessed_docs = [" ".join(preprocess(doc)) for doc in documents]
+
+preprocessed_docs
