@@ -11,10 +11,12 @@ print(word_tokens)
 sentence_tokens = nltk.sent_tokenize(text)
 print(sentence_tokens)
 
+
 # Pre processing - removendo qualquer token que não alfanuméricos e convertendo texto para minusculos
 def preprocess(text):
     tokens = nltk.word_tokenize(text.lower())
     return [word for word in tokens if word.isalnum()]
+
 
 documents = [
     "Machine learning é o aprendizado automático de máquinas a partir de dados.",

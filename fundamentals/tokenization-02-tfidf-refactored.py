@@ -78,6 +78,7 @@ def search_tfidf(query, vectorizer, tfidf_matrix):
     results = sorted(sorted_similiarities, key=lambda x: x[1], reverse=True)
     return results
 
+
 search_similarities = search_tfidf(query, vectorizer, tfidf_matrix)
 search_similarities
 

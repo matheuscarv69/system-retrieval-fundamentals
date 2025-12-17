@@ -74,6 +74,7 @@ writer.commit()
 
 query = "machine E learning"
 
+
 # Função para realizar busca booleana no índice
 def boolean_search(query, index):
     # Cria um QueryParser para interpretar a string de busca.
@@ -89,12 +90,13 @@ def boolean_search(query, index):
     # O uso de "with" garante que o searcher seja fechado automaticamente ao sair do bloco,
     # mesmo se ocorrerem erros — isso evita vazamento de recursos ou locks no índice.
     with index.searcher() as searcher:
-      # Executa a busca usando a consulta já parseada; retorna um objeto Results contendo os hits ordenados por relevância.
-      results = searcher.search(parsed_query)
-      # Cada 'hit' no 'results' representa um documento que corresponde à consulta.
-      # Um 'hit' funciona parecido com um dicionário/objeto: permite acessar os campos armazenados
-      # (por exemplo "title" e "content") e metadados como 'score' (relevância).
-      # Constrói e retorna uma lista de tuplas (title, content) a partir dos hits.
-      return [(hit["title"], hit["content"]) for hit in results]
+        # Executa a busca usando a consulta já parseada; retorna um objeto Results contendo os hits ordenados por relevância.
+        results = searcher.search(parsed_query)
+        # Cada 'hit' no 'results' representa um documento que corresponde à consulta.
+        # Um 'hit' funciona parecido com um dicionário/objeto: permite acessar os campos armazenados
+        # (por exemplo "title" e "content") e metadados como 'score' (relevância).
+        # Constrói e retorna uma lista de tuplas (title, content) a partir dos hits.
+        return [(hit["title"], hit["content"]) for hit in results]
+
 
 boolean_search(query, index)
