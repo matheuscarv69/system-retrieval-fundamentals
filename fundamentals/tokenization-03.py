@@ -59,9 +59,42 @@ os.mkdir("index_dir")
 # analisador/formatos padrões para indexação de texto.
 schema = Schema(title=ID(stored=True, unique=True), content=TEXT(stored=True))
 
+# Cria um índice no diretório "index_dir" usando o schema definido acima.
 index = create_in("index_dir", schema)
 
+# Obtém um writer para o índice e percorre `documents` com um índice `i`.
 writer = index.writer()
 for i, doc in enumerate(documents):
+    # Para cada `doc` adiciona um documento ao índice com dois campos:
+    # - title: a string do número `i` (usado aqui como identificador/rotulo)
+    # - content: o texto do documento
     writer.add_document(title=str(i), content=doc)
+# Finalmente, `writer.commit()` persiste as mudanças e libera o índice.
 writer.commit()
+
+query = "machine E learning"
+
+# Função para realizar busca booleana no índice
+def boolean_search(query, index):
+    # Cria um QueryParser para interpretar a string de busca.
+    # - "content" é o campo do schema que será consultado.
+    # - schema=index.schema fornece ao parser informações sobre analisadores e tipos de campo.
+    parser = QueryParser("content", schema=index.schema)
+
+    # Converte a string `query` em um objeto de consulta (parsed_query) que o searcher pode executar.
+    # O parser trata tokenização, normalização e operadores booleanos (AND/OR/NOT), conforme definido pelo schema.
+    parsed_query = parser.parse(query)
+
+    # Abre um searcher (objeto responsável por executar buscas) no índice.
+    # O uso de "with" garante que o searcher seja fechado automaticamente ao sair do bloco,
+    # mesmo se ocorrerem erros — isso evita vazamento de recursos ou locks no índice.
+    with index.searcher() as searcher:
+      # Executa a busca usando a consulta já parseada; retorna um objeto Results contendo os hits ordenados por relevância.
+      results = searcher.search(parsed_query)
+      # Cada 'hit' no 'results' representa um documento que corresponde à consulta.
+      # Um 'hit' funciona parecido com um dicionário/objeto: permite acessar os campos armazenados
+      # (por exemplo "title" e "content") e metadados como 'score' (relevância).
+      # Constrói e retorna uma lista de tuplas (title, content) a partir dos hits.
+      return [(hit["title"], hit["content"]) for hit in results]
+
+boolean_search(query, index)
